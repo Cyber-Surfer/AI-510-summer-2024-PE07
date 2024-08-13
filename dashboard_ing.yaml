@@ -1,0 +1,22 @@
+# be sure to enabled ingress on minikube “minikube addons enable ingress”
+# and run "minkube tunnel" on seperate terminal
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: kub-dashboard-ing
+  namespace: kubernetes-dashboard # dashboard is configured in this namespace and its like workspace/project
+  annotations:
+    spec.ingressClassName: nginx
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+spec:
+  rules:
+    - http: # its at port 80
+        paths: 
+          - pathType: ImplementationSpecific
+            path: / # at this url path root
+            backend:
+              service:
+                name: kubernetes-dashboard
+                port: 
+                  number: 80 # this is default port for dashboard
